@@ -1,0 +1,151 @@
+:root {
+  --bg: #0a0a0a;
+  --s1: #111;
+  --s2: #181818;
+  --s3: #202020;
+  --border: rgba(255, 255, 255, 0.08);
+  --border2: rgba(255, 255, 255, 0.16);
+  --text: #ede9e0;
+  --muted: #77716a;
+  --muted2: #a39b92;
+  --green: #b8f050;
+  --orange: #f0b040;
+  --red: #f05858;
+  --blue: #50d0f0;
+  --violet: #a060f0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+.wrap {
+  width: min(1240px, calc(100% - 96px));
+  margin: 0 auto;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding-top: 12px;
+}
+
+.configNote {
+  display: block;
+  margin: 0;
+  padding-top: 12px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.notice {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 200;
+  border: 1px solid rgba(240, 80, 80, 0.25);
+  background: rgba(240, 80, 80, 0.08);
+  color: var(--red);
+  border-radius: 2px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.sectionHead {
+  padding: 64px 0 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+
+.sectionHead.compact {
+  padding-top: 20px;
+}
+
+.sectionLabel {
+  margin: 0 0 12px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.sectionHead h2 {
+  margin: 0 0 16px;
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.sectionHead p:last-child {
+  max-width: 620px;
+  margin: 0;
+  color: var(--muted2);
+}
+
+.green,
+.phaseOne {
+  --tone: var(--green);
+}
+
+.orange,
+.phaseTwo {
+  --tone: var(--orange);
+}
+
+.phaseThree {
+  --tone: var(--red);
+}
+
+.phaseFour {
+  --tone: var(--violet);
+}
+
+.blue {
+  color: var(--blue);
+}
+
+@media (max-width: 768px) {
+  .wrap {
+    width: min(100% - 40px, 1240px);
+  }
+
+  .statusRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

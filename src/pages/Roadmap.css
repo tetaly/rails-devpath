@@ -1,0 +1,264 @@
+.roadmap {
+  padding-bottom: 80px;
+}
+
+.roadSummary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+  margin-bottom: 28px;
+}
+
+.roadSummary div {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--s1);
+  padding: 18px 20px;
+}
+
+.roadSummary strong {
+  display: block;
+  color: var(--green);
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.roadSummary span {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.phaseList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.roadPhase {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--s1);
+  overflow: hidden;
+}
+
+.roadPhaseHead {
+  display: grid;
+  grid-template-columns: 34px 4px 1fr auto auto;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 24px 28px;
+  text-align: left;
+}
+
+.roadPhaseHead:hover {
+  background: var(--s2);
+}
+
+.roadPhaseHead > span {
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.roadPhaseHead i {
+  width: 4px;
+  height: 44px;
+  border-radius: 2px;
+  background: var(--tone);
+}
+
+.roadPhaseHead h3 {
+  margin: 0 0 4px;
+  color: var(--tone);
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+}
+
+.roadPhaseHead p {
+  margin: 0;
+  color: var(--muted2);
+}
+
+.phaseMiniBar {
+  width: min(360px, 100%);
+  height: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+  border-radius: 1px;
+  background: var(--s3);
+}
+
+.phaseMiniBar span {
+  display: block;
+  height: 100%;
+  background: var(--tone);
+}
+
+.roadPhaseHead small {
+  color: var(--muted2);
+  white-space: nowrap;
+}
+
+.roadPhaseHead em {
+  border-radius: 2px;
+  background: var(--s3);
+  color: var(--muted);
+  font-style: normal;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.phaseDetail {
+  padding: 0 28px 28px;
+}
+
+.phaseDetailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr minmax(160px, 0.35fr);
+  gap: 3px;
+  margin-bottom: 18px;
+}
+
+.phaseInfoBox {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.025);
+  padding: 16px;
+}
+
+.phaseInfoBox span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--tone);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.phaseInfoBox p {
+  margin: 0;
+  color: var(--muted2);
+}
+
+.levelDots {
+  display: flex;
+  gap: 6px;
+}
+
+.levelDots b {
+  display: grid;
+  place-items: center;
+  min-width: 32px;
+  height: 26px;
+  border-radius: 2px;
+  font-size: 11px;
+}
+
+.levelDots .base {
+  background: rgba(184, 240, 80, 0.1);
+  color: var(--green);
+}
+
+.levelDots .middle {
+  background: rgba(240, 176, 64, 0.1);
+  color: var(--orange);
+}
+
+.levelDots .advanced {
+  background: rgba(240, 80, 80, 0.1);
+  color: var(--red);
+}
+
+.moduleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 3px;
+}
+
+.moduleCard {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--s2);
+  padding: 16px 18px;
+}
+
+.moduleCard header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.moduleCard strong {
+  font-family: 'Syne', sans-serif;
+}
+
+.moduleCard small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.moduleProgress {
+  height: 2px;
+  overflow: hidden;
+  border-radius: 1px;
+  background: var(--bg);
+  margin-bottom: 12px;
+}
+
+.moduleProgress span {
+  display: block;
+  height: 100%;
+  background: var(--tone);
+}
+
+.moduleTopics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.moduleTopics span {
+  border: 1px solid var(--border);
+  border-radius: 1px;
+  background: var(--bg);
+  color: var(--muted2);
+  padding: 2px 8px;
+  font-size: 10px;
+}
+
+.moduleTopics span.new {
+  border-color: rgba(80, 208, 240, 0.25);
+  color: var(--blue);
+}
+
+.moduleTopics span.done {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+@media (max-width: 760px) {
+  .roadSummary,
+  .phaseDetailGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .roadPhaseHead {
+    grid-template-columns: 28px 4px 1fr;
+  }
+
+  .roadPhaseHead small,
+  .roadPhaseHead em {
+    grid-column: 3;
+  }
+}

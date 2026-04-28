@@ -1,0 +1,137 @@
+.topicItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text);
+  padding: 7px 9px;
+  text-align: left;
+}
+
+.topicItem:hover {
+  background: var(--s2);
+  border-color: var(--border);
+}
+
+.topicItem.new {
+  background: rgba(80, 208, 240, 0.025);
+  border-color: rgba(80, 208, 240, 0.12);
+}
+
+.topicItem.done {
+  opacity: 0.42;
+}
+
+.topicItem.done strong {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.topicMain {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
+  gap: 8px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.check {
+  display: grid;
+  place-items: center;
+  flex: 0 0 13px;
+  height: 13px;
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  color: #0a0a0a;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.done .check {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.topicText {
+  min-width: 0;
+  flex: 1;
+}
+
+.topicText strong,
+.topicText small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topicText strong {
+  font-size: 12px;
+}
+
+.topicText small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.topicBadges {
+  display: flex;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.topicBadge {
+  border-radius: 1px;
+  padding: 2px 6px;
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.topicBadge.base {
+  border: 1px solid rgba(184, 240, 80, 0.18);
+  color: var(--green);
+  background: rgba(184, 240, 80, 0.08);
+}
+
+.topicBadge.middle {
+  border: 1px solid rgba(240, 176, 64, 0.18);
+  color: var(--orange);
+  background: rgba(240, 176, 64, 0.08);
+}
+
+.topicBadge.advanced {
+  border: 1px solid rgba(240, 80, 80, 0.18);
+  color: var(--red);
+  background: rgba(240, 80, 80, 0.08);
+}
+
+.topicBadge.newBadge {
+  border: 1px solid rgba(80, 208, 240, 0.18);
+  color: var(--blue);
+  background: rgba(80, 208, 240, 0.08);
+}
+
+.topicDetailsButton {
+  border: 1px solid var(--border);
+  border-radius: 1px;
+  background: var(--bg);
+  color: var(--muted2);
+  cursor: pointer;
+  padding: 3px 7px;
+  font-size: 9px;
+}
+
+.topicDetailsButton:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}

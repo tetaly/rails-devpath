@@ -1,0 +1,18 @@
+.progressTrack {
+  height: 2px;
+  overflow: hidden;
+  border-radius: 1px;
+  background: var(--s3);
+}
+
+.progressFill {
+  height: 100%;
+  width: 0;
+  border-radius: 1px;
+  background: var(--green);
+  transition: width 0.5s ease;
+}
+
+.progressFill.orange {
+  background: var(--orange);
+}

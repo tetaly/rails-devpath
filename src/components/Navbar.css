@@ -1,0 +1,132 @@
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 10, 10, 0.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(1240px, calc(100% - 96px));
+  margin: 0 auto;
+  padding: 15px 0;
+  gap: 20px;
+}
+
+.logo {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.logo span {
+  color: var(--green);
+}
+
+.navTabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.navTab {
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  border-radius: 2px;
+  padding: 7px 16px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12px;
+  text-decoration: none;
+  transition: 0.15s;
+}
+
+.navTab:hover {
+  background: var(--s2);
+  color: var(--text);
+}
+
+.navTab.active {
+  background: var(--green);
+  color: #0a0a0a;
+  font-weight: 500;
+}
+
+.projectTab:not(.active) {
+  border: 1px solid rgba(240, 176, 64, 0.25);
+  color: var(--orange);
+}
+
+.navProgress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.navProgress strong {
+  color: var(--green);
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+}
+
+.accountButton {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--s1);
+  color: var(--muted2);
+  cursor: pointer;
+  padding: 7px 12px;
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.accountButton:hover,
+.accountButton.active {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.languageSwitch {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.languageSwitch button {
+  border: 0;
+  background: var(--s1);
+  color: var(--muted);
+  cursor: pointer;
+  padding: 7px 9px;
+  font-size: 10px;
+}
+
+.languageSwitch button.active {
+  background: var(--green);
+  color: #0a0a0a;
+}
+
+@media (max-width: 860px) {
+  .navInner {
+    width: min(100% - 40px, 1240px);
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

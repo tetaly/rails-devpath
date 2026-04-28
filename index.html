@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rails Dev Path</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --s1: #111111;
+  --s2: #181818;
+  --s3: #1e1e1e;
+  --border: rgba(255,255,255,0.055);
+  --border2: rgba(255,255,255,0.1);
+  --text: #ede9e0;
+  --muted: #5a5750;
+  --muted2: #888078;
+  --accent: #b8f050;
+  --accent2: rgba(184,240,80,0.1);
+  --fond: #b8f050;
+  --fond-bg: rgba(184,240,80,0.08);
+  --moy: #f0b040;
+  --moy-bg: rgba(240,176,64,0.08);
+  --adv: #f05050;
+  --adv-bg: rgba(240,80,80,0.08);
+  --new: #50d0f0;
+  --new-bg: rgba(80,208,240,0.08);
+  --phase1: #b8f050;
+  --phase2: #f0b040;
+  --phase3: #f05858;
+  --phase4: #a060f0;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  line-height:1.65;
+  min-height:100vh;
+}
+
+/* Grain */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;
+}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 48px}
+
+/* ─── NAV ─── */
+nav{
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid var(--border);
+  background:rgba(10,10,10,0.92);
+  backdrop-filter:blur(12px);
+}
+.nav-inner{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 48px;max-width:1240px;margin:0 auto;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:18px;
+  letter-spacing:-0.02em;color:var(--text);
+}
+.nav-logo span{color:var(--accent)}
+.nav-tabs{display:flex;gap:4px}
+.nav-tab{
+  padding:7px 18px;border-radius:2px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  cursor:pointer;border:none;background:none;
+  color:var(--muted);letter-spacing:0.04em;
+  transition:all 0.15s;
+}
+.nav-tab:hover{color:var(--text);background:var(--s2)}
+.nav-tab.active{background:var(--accent);color:#0a0a0a;font-weight:500}
+.nav-progress{
+  font-size:11px;color:var(--muted);
+  display:flex;align-items:center;gap:10px;
+}
+.nav-pct{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:16px;color:var(--accent);
+}
+
+/* ─── PAGES ─── */
+.page{display:none}
+.page.active{display:block}
+
+/* ─── HERO ─── */
+.hero{
+  padding:80px 0 72px;
+  border-bottom:1px solid var(--border);
+}
+.hero-eyebrow{
+  font-size:10px;letter-spacing:0.25em;
+  color:var(--accent);text-transform:uppercase;
+  margin-bottom:20px;opacity:0.7;
+}
+.hero-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(56px,8vw,100px);
+  font-weight:800;line-height:0.9;
+  letter-spacing:-0.04em;
+  margin-bottom:32px;
+}
+.hero-title em{
+  font-style:normal;
+  color:var(--accent);
+  display:block;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px;margin-top:48px;
+}
+.hero-stat{
+  padding:28px;
+  border:1px solid var(--border);
+  border-radius:2px;
+  background:var(--s1);
+}
+.hero-stat-n{
+  font-family:'Syne',sans-serif;
+  font-size:42px;font-weight:800;
+  line-height:1;color:var(--text);
+  margin-bottom:6px;
+}
+.hero-stat-n.g{color:var(--accent)}
+.hero-stat-n.b{color:var(--new)}
+.hero-stat-n.o{color:var(--moy)}
+.hero-stat-l{font-size:11px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase}
+
+.prog-wrap{
+  margin-top:40px;padding-top:32px;
+  border-top:1px solid var(--border);
+}
+.prog-head{
+  display:flex;justify-content:space-between;
+  font-size:11px;color:var(--muted);
+  letter-spacing:0.06em;margin-bottom:10px;
+}
+.prog-bar{
+  height:2px;background:var(--s3);border-radius:1px;overflow:hidden;
+}
+.prog-fill{
+  height:100%;background:var(--accent);
+  width:0%;transition:width 1.4s cubic-bezier(.4,0,.2,1);
+  border-radius:1px;
+}
+
+/* ─── ROADMAP ─── */
+.roadmap-intro{
+  padding:64px 0 40px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:60px;
+}
+.section-label{
+  font-size:10px;letter-spacing:0.2em;
+  color:var(--muted);text-transform:uppercase;
+  margin-bottom:12px;
+}
+.section-title{
+  font-family:'Syne',sans-serif;
+  font-size:36px;font-weight:800;
+  letter-spacing:-0.02em;line-height:1.1;
+  margin-bottom:16px;
+}
+.section-desc{
+  color:var(--muted2);font-size:13px;max-width:560px;
+}
+
+.phases{display:flex;flex-direction:column;gap:4px;}
+
+.phase{
+  border:1px solid var(--border);
+  background:var(--s1);
+  overflow:hidden;
+  border-radius:2px;
+  transition:border-color 0.2s;
+}
+.phase:hover{border-color:var(--border2)}
+
+.phase-header{
+  display:flex;align-items:center;gap:20px;
+  padding:24px 28px;
+  cursor:pointer;
+  transition:background 0.15s;
+  user-select:none;
+}
+.phase-header:hover{background:var(--s2)}
+
+.phase-num{
+  font-family:'Syne',sans-serif;
+  font-size:11px;font-weight:700;
+  letter-spacing:0.2em;
+  width:28px;flex-shrink:0;
+  opacity:0.4;
+}
+.phase-color{
+  width:4px;height:44px;border-radius:2px;flex-shrink:0;
+}
+.phase-info{flex:1}
+.phase-name{
+  font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:700;
+  letter-spacing:-0.01em;
+  margin-bottom:4px;
+}
+.phase-tagline{font-size:12px;color:var(--muted2)}
+.phase-meta{
+  display:flex;gap:16px;align-items:center;
+  flex-shrink:0;
+}
+.phase-dur{
+  font-size:11px;color:var(--muted);
+  padding:4px 12px;background:var(--s3);
+  border-radius:2px;
+}
+.phase-arrow{
+  font-size:14px;color:var(--muted);
+  transition:transform 0.2s;
+  flex-shrink:0;
+}
+.phase.open .phase-arrow{transform:rotate(180deg)}
+
+.phase-body{
+  display:none;
+  padding:0 28px 28px;
+}
+.phase.open .phase-body{display:block}
+
+.phase-modules{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:3px;
+}
+
+.module-card{
+  background:var(--s2);
+  border:1px solid var(--border);
+  padding:16px 18px;
+  border-radius:2px;
+  transition:border-color 0.15s;
+}
+.module-card:hover{border-color:var(--border2)}
+.module-card-top{
+  display:flex;justify-content:space-between;
+  align-items:flex-start;gap:8px;
+  margin-bottom:10px;
+}
+.module-card-name{
+  font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:700;
+  letter-spacing:0.01em;
+}
+.module-badge{
+  font-size:9px;padding:3px 9px;
+  border-radius:2px;font-weight:500;
+  letter-spacing:0.06em;text-transform:uppercase;
+  white-space:nowrap;flex-shrink:0;
+}
+.b-core{background:rgba(184,240,80,0.1);color:var(--fond);border:1px solid rgba(184,240,80,0.2)}
+.b-build{background:rgba(240,176,64,0.1);color:var(--moy);border:1px solid rgba(240,176,64,0.2)}
+.b-prod{background:rgba(240,80,80,0.1);color:var(--adv);border:1px solid rgba(240,80,80,0.2)}
+.b-adv{background:rgba(160,96,240,0.1);color:#c090ff;border:1px solid rgba(160,96,240,0.2)}
+
+.module-topics{display:flex;flex-wrap:wrap;gap:4px}
+.topic-chip{
+  font-size:10px;
+  padding:2px 8px;
+  border-radius:1px;
+  background:var(--bg);
+  border:1px solid var(--border);
+  color:var(--muted2);
+  transition:border-color 0.1s, color 0.1s;
+}
+.topic-chip:hover{border-color:var(--border2);color:var(--text)}
+.topic-chip.new{border-color:rgba(80,208,240,0.25);color:var(--new)}
+
+/* Phase colors */
+.p1 .phase-color,.p1 .phase-name{color:var(--phase1)}
+.p1 .phase-color{background:var(--phase1)}
+.p2 .phase-color,.p2 .phase-name{color:var(--phase2)}
+.p2 .phase-color{background:var(--phase2)}
+.p3 .phase-color,.p3 .phase-name{color:var(--phase3)}
+.p3 .phase-color{background:var(--phase3)}
+.p4 .phase-color,.p4 .phase-name{color:var(--phase4)}
+.p4 .phase-color{background:var(--phase4)}
+
+/* Timeline connector */
+.timeline-line{
+  width:2px;background:var(--border);
+  margin:0 auto;height:24px;
+}
+
+/* ─── CURRICULUM ─── */
+.curriculum-top{
+  padding:64px 0 40px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:48px;
+}
+.filter-row{
+  display:flex;gap:6px;flex-wrap:wrap;
+  margin-bottom:32px;
+}
+.filter-btn{
+  padding:6px 16px;
+  border-radius:2px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;cursor:pointer;
+  border:1px solid var(--border);
+  background:var(--s1);color:var(--muted);
+  letter-spacing:0.04em;
+  transition:all 0.15s;
+}
+.filter-btn:hover{border-color:var(--border2);color:var(--text)}
+.filter-btn.active{background:var(--accent);border-color:var(--accent);color:#0a0a0a;font-weight:500}
+.filter-btn.new-f.active{background:var(--new);border-color:var(--new);color:#0a0a0a}
+
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:40px}
+.leg-item{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
+.leg-dot{width:7px;height:7px;border-radius:50%}
+
+.cats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:2px;
+}
+.cat-block{
+  background:var(--s1);
+  border:1px solid var(--border);
+  padding:22px;
+  border-radius:2px;
+  transition:border-color 0.2s;
+  animation:fadeUp 0.35s ease both;
+}
+.cat-block:hover{border-color:var(--border2)}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.cat-head{
+  display:flex;justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.cat-name{
+  font-family:'Syne',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:0.06em;text-transform:uppercase;
+}
+.cat-cnt{
+  font-size:10px;color:var(--muted);
+  background:var(--s2);padding:2px 8px;border-radius:2px;
+}
+
+.topic-list{display:flex;flex-direction:column;gap:3px}
+
+.t-item{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 9px;border-radius:2px;
+  cursor:pointer;border:1px solid transparent;
+  transition:background 0.1s,border-color 0.1s;
+}
+.t-item:hover{background:var(--s2);border-color:var(--border)}
+.t-item.done{opacity:0.38}
+.t-item.done .t-name{text-decoration:line-through;color:var(--muted)}
+.t-item.isnew{
+  border-color:rgba(80,208,240,0.12);
+  background:rgba(80,208,240,0.025);
+}
+.t-item.isnew:hover{background:rgba(80,208,240,0.05)}
+
+.chk{
+  width:13px;height:13px;
+  border:1px solid var(--border2);
+  border-radius:2px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.12s;
+}
+.t-item:hover .chk{border-color:var(--accent)}
+.t-item.done .chk{background:var(--accent);border-color:var(--accent)}
+.chk-tick{display:none;color:#0a0a0a;font-size:8px;line-height:1;font-weight:700}
+.t-item.done .chk-tick{display:block}
+
+.t-info{flex:1;min-width:0}
+.t-name{font-size:12px;color:var(--text);font-weight:500;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.t-sub{font-size:10px;color:var(--muted);margin-top:1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.t-badges{display:flex;gap:3px;flex-shrink:0}
+.t-badge{
+  font-size:9px;padding:2px 6px;border-radius:1px;
+  font-weight:500;letter-spacing:0.04em;text-transform:uppercase;
+}
+.bf{background:var(--fond-bg);color:var(--fond);border:1px solid rgba(184,240,80,0.18)}
+.bm{background:var(--moy-bg);color:var(--moy);border:1px solid rgba(240,176,64,0.18)}
+.ba{background:var(--adv-bg);color:var(--adv);border:1px solid rgba(240,80,80,0.18)}
+.bn{background:var(--new-bg);color:var(--new);border:1px solid rgba(80,208,240,0.18);font-size:8px}
+
+/* ─── FOOTER ─── */
+.page-footer{
+  margin-top:80px;padding:28px 0;
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.reset-btn{
+  background:none;border:1px solid var(--border);
+  color:var(--muted);font-family:'JetBrains Mono',monospace;
+  font-size:11px;padding:7px 16px;cursor:pointer;
+  border-radius:2px;letter-spacing:0.06em;
+  transition:all 0.15s;
+}
+.reset-btn:hover{border-color:var(--adv);color:var(--adv)}
+
+/* ─── FLAT VIEW ─── */
+.flat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:3px;
+}
+
+/* ─── PROJECT PAGE ─── */
+.proj-hero{
+  padding:64px 0 56px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:60px;
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;
+}
+.proj-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(240,176,64,0.08);
+  border:1px solid rgba(240,176,64,0.2);
+  color:var(--moy);font-size:10px;
+  letter-spacing:0.15em;text-transform:uppercase;
+  padding:5px 14px;border-radius:2px;margin-bottom:20px;
+}
+.proj-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--moy);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.proj-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(40px,5vw,64px);
+  font-weight:800;line-height:0.95;
+  letter-spacing:-0.03em;margin-bottom:20px;
+}
+.proj-title span{color:var(--moy);display:block}
+.proj-desc{
+  font-size:13px;color:var(--muted2);
+  line-height:1.8;max-width:480px;margin-bottom:28px;
+}
+.proj-stack{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:32px}
+.stack-chip{
+  font-size:10px;padding:4px 12px;border-radius:2px;
+  border:1px solid var(--border2);color:var(--muted2);
+  background:var(--s2);letter-spacing:0.04em;
+}
+.proj-schema{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:2px;padding:24px;font-size:11px;
+  font-family:'JetBrains Mono',monospace;line-height:1.9;
+  color:var(--muted2);
+}
+.proj-schema .model{
+  color:var(--accent);font-weight:500;
+  display:block;margin-top:12px;margin-bottom:2px;
+}
+.proj-schema .model:first-child{margin-top:0}
+.proj-schema .field{padding-left:16px;display:block}
+.proj-schema .field .fname{color:var(--text)}
+.proj-schema .field .ftype{color:var(--moy)}
+.proj-schema .field .fref{color:var(--new)}
+
+.features-section{margin-bottom:60px}
+.features-phase{margin-bottom:4px;border:1px solid var(--border);border-radius:2px;background:var(--s1);overflow:hidden}
+.features-phase-head{
+  display:flex;align-items:center;gap:16px;
+  padding:20px 24px;cursor:pointer;
+  transition:background 0.15s;
+  user-select:none;
+}
+.features-phase-head:hover{background:var(--s2)}
+.fph-bar{width:3px;border-radius:2px;flex-shrink:0}
+.fph-num{
+  font-family:'Syne',sans-serif;font-size:11px;
+  font-weight:700;color:var(--muted);letter-spacing:0.15em;
+  flex-shrink:0;width:24px;
+}
+.fph-name{
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  flex:1;
+}
+.fph-count{font-size:11px;color:var(--muted);margin-left:auto}
+.fph-arrow{font-size:12px;color:var(--muted);transition:transform 0.2s;margin-left:8px}
+.features-phase.open .fph-arrow{transform:rotate(180deg)}
+.features-phase-body{display:none;padding:0 24px 24px}
+.features-phase.open .features-phase-body{display:block}
+
+.features-grid{display:flex;flex-direction:column;gap:3px}
+
+.feature-item{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:2px;padding:16px 18px;
+  transition:border-color 0.15s;
+}
+.feature-item:hover{border-color:var(--border2)}
+.feature-item.done-f{opacity:0.45;border-color:transparent}
+.feature-item.done-f .feat-name{text-decoration:line-through;color:var(--muted)}
+
+.feat-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.feat-chk{
+  width:16px;height:16px;border:1px solid var(--border2);
+  border-radius:2px;flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all 0.12s;
+}
+.feat-chk:hover{border-color:var(--moy)}
+.feature-item.done-f .feat-chk{background:var(--accent);border-color:var(--accent)}
+.feat-chk-t{display:none;color:#0a0a0a;font-size:9px;font-weight:700}
+.feature-item.done-f .feat-chk-t{display:block}
+
+.feat-info{flex:1}
+.feat-name{
+  font-family:'Syne',sans-serif;font-size:14px;
+  font-weight:700;margin-bottom:4px;
+}
+.feat-desc{font-size:12px;color:var(--muted2);line-height:1.7}
+
+.feat-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+
+.feat-topic{
+  font-size:9px;padding:2px 8px;border-radius:1px;
+  background:var(--fond-bg);color:var(--fond);
+  border:1px solid rgba(184,240,80,0.15);
+  letter-spacing:0.04em;cursor:pointer;
+  transition:background 0.1s;
+}
+.feat-topic:hover{background:rgba(184,240,80,0.15)}
+.feat-topic.t-moy{background:var(--moy-bg);color:var(--moy);border-color:rgba(240,176,64,0.15)}
+.feat-topic.t-moy:hover{background:rgba(240,176,64,0.15)}
+.feat-topic.t-adv{background:var(--adv-bg);color:var(--adv);border-color:rgba(240,80,80,0.15)}
+.feat-topic.t-adv:hover{background:rgba(240,80,80,0.15)}
+
+.feat-refs{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.ref-link{
+  font-size:10px;padding:3px 10px;border-radius:2px;
+  background:var(--s1);border:1px solid var(--border);
+  color:var(--muted2);text-decoration:none;
+  letter-spacing:0.03em;
+  transition:all 0.12s;display:flex;align-items:center;gap:5px;
+}
+.ref-link:hover{border-color:var(--new);color:var(--new)}
+.ref-link::before{content:'↗';font-size:9px}
+
+.proj-commands{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:2px;padding:28px;margin-bottom:60px;
+}
+.cmd-title{
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  margin-bottom:20px;
+}
+.cmd-block{margin-bottom:16px}
+.cmd-comment{font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:0.04em}
+.cmd-line{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:2px;padding:10px 14px;
+  font-size:12px;color:var(--accent);
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;transition:border-color 0.15s;
+  user-select:none;
+}
+.cmd-line:hover{border-color:var(--border2)}
+.cmd-copy{font-size:10px;color:var(--muted)}
+.cmd-line:hover .cmd-copy{color:var(--accent)}
+
+.proj-progress-wrap{
+  margin-bottom:60px;padding:24px;
+  background:var(--s1);border:1px solid var(--border);border-radius:2px;
+}
+.proj-prog-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:16px;
+}
+.proj-prog-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
+.proj-prog-pct{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--moy)}
+.phases-prog{display:flex;flex-direction:column;gap:10px}
+.phase-prog-row{display:flex;align-items:center;gap:12px}
+.phase-prog-label{font-size:11px;color:var(--muted);width:80px;flex-shrink:0;letter-spacing:0.04em}
+.phase-prog-bar{flex:1;height:2px;background:var(--s3);border-radius:1px;overflow:hidden}
+.phase-prog-fill{height:100%;border-radius:1px;transition:width 1s ease}
+.phase-prog-cnt{font-size:11px;color:var(--muted);width:50px;text-align:right;flex-shrink:0}
+
+@media(max-width:768px){
+  .wrap{padding:0 20px}
+  .nav-inner{padding:14px 20px}
+  .hero-title{font-size:48px}
+  .hero-grid{grid-template-columns:1fr 1fr}
+  .cats-grid{grid-template-columns:1fr}
+  .phase-modules{grid-template-columns:1fr}
+  .proj-hero{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">rails<span>.</span>devpath</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('overview')">// aperçu</button>
+      <button class="nav-tab" onclick="showPage('roadmap')">// roadmap</button>
+      <button class="nav-tab" onclick="showPage('curriculum')">// curriculum</button>
+      <button class="nav-tab" onclick="showPage('project')" style="color:#f0b040;border:1px solid rgba(240,176,64,0.25)">// projet</button>
+    </div>
+    <div class="nav-progress">
+      <span id="nav-done-text">0 complétés</span>
+      <span class="nav-pct" id="nav-pct">0%</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════ PAGE: OVERVIEW ═══════════════════ -->
+<div id="page-overview" class="page active">
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-eyebrow">// Curriculum complet · v2.0 · 2024</div>
+    <h1 class="hero-title">Rails<em>Dev Path</em></h1>
+    <div class="hero-grid">
+      <div class="hero-stat">
+        <div class="hero-stat-n g" id="ov-total">0</div>
+        <div class="hero-stat-l">topics au total</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n b" id="ov-new">0</div>
+        <div class="hero-stat-l">topics ajoutés</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n" id="ov-done">0</div>
+        <div class="hero-stat-l">topics complétés</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-n o" id="ov-cats">0</div>
+        <div class="hero-stat-l">catégories</div>
+      </div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-head">
+        <span>progression globale</span>
+        <span id="ov-pct">0%</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="ov-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- Phase overview cards -->
+  <div style="padding:64px 0 40px;border-bottom:1px solid var(--border);margin-bottom:40px">
+    <div class="section-label">// parcours d'apprentissage</div>
+    <div class="section-title">4 phases vers la maîtrise</div>
+    <div class="section-desc">De zéro à développeur Rails confirmé, avec une progression logique et des jalons clairs.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;margin-bottom:80px">
+    <div class="module-card" style="cursor:pointer" onclick="showPage('roadmap')">
+      <div style="width:3px;height:36px;background:var(--phase1);border-radius:2px;margin-bottom:16px"></div>
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--phase1);margin-bottom:6px">Phase 01</div>
+      <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px">Fondations</div>
+      <div style="font-size:11px;color:var(--muted2);margin-bottom:14px">Ruby · Rails MVC · ActiveRecord · SQL · Git · Debugging</div>
+      <div style="font-size:10px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">4 – 6 semaines →</div>
+    </div>
+    <div class="module-card" style="cursor:pointer" onclick="showPage('roadmap')">
+      <div style="width:3px;height:36px;background:var(--phase2);border-radius:2px;margin-bottom:16px"></div>
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--phase2);margin-bottom:6px">Phase 02</div>
+      <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px">Construction</div>
+      <div style="font-size:11px;color:var(--muted2);margin-bottom:14px">Auth · Frontend · Testing · Storage · Config · Emails</div>
+      <div style="font-size:10px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">6 – 8 semaines →</div>
+    </div>
+    <div class="module-card" style="cursor:pointer" onclick="showPage('roadmap')">
+      <div style="width:3px;height:36px;background:var(--phase3);border-radius:2px;margin-bottom:16px"></div>
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--phase3);margin-bottom:6px">Phase 03</div>
+      <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px">Production</div>
+      <div style="font-size:11px;color:var(--muted2);margin-bottom:14px">Deployment · Jobs · API · Sécurité · Performance</div>
+      <div style="font-size:10px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">4 – 6 semaines →</div>
+    </div>
+    <div class="module-card" style="cursor:pointer" onclick="showPage('roadmap')">
+      <div style="width:3px;height:36px;background:var(--phase4);border-radius:2px;margin-bottom:16px"></div>
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--phase4);margin-bottom:6px">Phase 04</div>
+      <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px">Excellence</div>
+      <div style="font-size:11px;color:var(--muted2);margin-bottom:14px">Architecture · Realtime · Avancé · Soft Skills</div>
+      <div style="font-size:10px;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase">Continu →</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ PAGE: ROADMAP ═══════════════════ -->
+<div id="page-roadmap" class="page">
+<div class="wrap">
+  <div class="roadmap-intro">
+    <div class="section-label">// roadmap</div>
+    <div class="section-title">4 phases,<br>~20 semaines</div>
+    <div class="section-desc">Un parcours progressif du débutant au développeur Rails confirmé. Chaque phase s'appuie sur la précédente.</div>
+  </div>
+
+  <div class="phases" id="phases-container"></div>
+
+  <div class="page-footer">
+    <span style="font-size:11px;color:var(--muted)">Clique sur une phase pour voir le détail</span>
+    <button class="reset-btn" onclick="showPage('curriculum')">→ Voir le curriculum</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ PAGE: CURRICULUM ═══════════════════ -->
+<div id="page-curriculum" class="page">
+<div class="wrap">
+  <div class="curriculum-top">
+    <div class="section-label">// curriculum complet</div>
+    <div class="section-title">Tous les topics,<br>organisés</div>
+    <div class="section-desc">Coche chaque topic au fur et à mesure. Ta progression est sauvegardée automatiquement.</div>
+  </div>
+
+  <div class="filter-row" id="filterBar"></div>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--fond)"></div> Fondamental</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--moy)"></div> Moyen</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--adv)"></div> Avancé</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--new)"></div> Nouveau</div>
+  </div>
+
+  <div id="content"></div>
+
+  <div class="page-footer">
+    <span id="footer-txt" style="font-size:11px;color:var(--muted)"></span>
+    <button class="reset-btn" onclick="resetProg()">↺ reset progression</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ PAGE: PROJECT ═══════════════════ -->
+<div id="page-project" class="page">
+<div class="wrap">
+
+  <!-- Hero -->
+  <div class="proj-hero">
+    <div>
+      <div class="proj-tag"><span class="proj-tag-dot"></span>Projet fil rouge · Phase 2 → 4</div>
+      <h1 class="proj-title">Medi<span>Track</span></h1>
+      <p class="proj-desc">
+        Une plateforme de gestion de rendez-vous médicaux. Des patients réservent des créneaux avec des médecins, des admins supervisent tout. Suffisamment réel pour ton CV, suffisamment cadré pour être faisable seul.
+      </p>
+      <div class="proj-stack">
+        <span class="stack-chip">Ruby on Rails 7</span>
+        <span class="stack-chip">PostgreSQL</span>
+        <span class="stack-chip">Devise</span>
+        <span class="stack-chip">Pundit</span>
+        <span class="stack-chip">Tailwind CSS</span>
+        <span class="stack-chip">Turbo + Stimulus</span>
+        <span class="stack-chip">RSpec</span>
+        <span class="stack-chip">Sidekiq</span>
+        <span class="stack-chip">Active Storage</span>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div class="proj-progress-wrap" style="flex:1;min-width:200px;margin-bottom:0;padding:18px">
+          <div class="proj-prog-head" style="margin-bottom:12px">
+            <span class="proj-prog-title" style="font-size:13px">Features complétées</span>
+            <span class="proj-prog-pct" id="proj-pct" style="font-size:20px">0%</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" id="proj-bar"></div></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:8px" id="proj-count">0 / 0 features</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="proj-schema">
+        <span class="model">User</span>
+        <span class="field"><span class="fname">email</span> <span class="ftype">:string</span></span>
+        <span class="field"><span class="fname">role</span> <span class="ftype">:enum</span> <span class="fref">patient | doctor | admin</span></span>
+        <span class="field"><span class="fname">first_name, last_name</span> <span class="ftype">:string</span></span>
+
+        <span class="model">DoctorProfile</span>
+        <span class="field"><span class="fname">user_id</span> <span class="ftype">:fk</span> <span class="fref">→ User</span></span>
+        <span class="field"><span class="fname">specialty</span> <span class="ftype">:string</span></span>
+        <span class="field"><span class="fname">bio</span> <span class="ftype">:text</span></span>
+        <span class="field"><span class="fname">avatar</span> <span class="ftype">:attachment</span></span>
+
+        <span class="model">Appointment</span>
+        <span class="field"><span class="fname">doctor_id</span> <span class="ftype">:fk</span> <span class="fref">→ User</span></span>
+        <span class="field"><span class="fname">patient_id</span> <span class="ftype">:fk</span> <span class="fref">→ User</span></span>
+        <span class="field"><span class="fname">scheduled_at</span> <span class="ftype">:datetime</span></span>
+        <span class="field"><span class="fname">status</span> <span class="ftype">:enum</span> <span class="fref">pending | confirmed | cancelled</span></span>
+        <span class="field"><span class="fname">notes</span> <span class="ftype">:text</span></span>
+
+        <span class="model">Availability</span>
+        <span class="field"><span class="fname">doctor_id</span> <span class="ftype">:fk</span> <span class="fref">→ User</span></span>
+        <span class="field"><span class="fname">day_of_week</span> <span class="ftype">:integer</span></span>
+        <span class="field"><span class="fname">starts_at, ends_at</span> <span class="ftype">:time</span></span>
+
+        <span class="model">Notification</span>
+        <span class="field"><span class="fname">user_id</span> <span class="ftype">:fk</span> <span class="fref">→ User</span></span>
+        <span class="field"><span class="fname">appointment_id</span> <span class="ftype">:fk</span></span>
+        <span class="field"><span class="fname">read_at</span> <span class="ftype">:datetime</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Commands -->
+  <div class="proj-commands">
+    <div class="cmd-title">// Démarrer le projet</div>
+    <div class="cmd-block">
+      <div class="cmd-comment"># Créer l'app Rails</div>
+      <div class="cmd-line" onclick="copyCmd(this)">
+        <span>rails new meditrack --database=postgresql --css=tailwind</span>
+        <span class="cmd-copy">copier</span>
+      </div>
+    </div>
+    <div class="cmd-block">
+      <div class="cmd-comment"># Gems à ajouter dans Gemfile</div>
+      <div class="cmd-line" onclick="copyCmd(this)">
+        <span>gem 'devise' · gem 'pundit' · gem 'sidekiq' · gem 'rspec-rails'</span>
+        <span class="cmd-copy">copier</span>
+      </div>
+    </div>
+    <div class="cmd-block">
+      <div class="cmd-comment"># Setup Devise</div>
+      <div class="cmd-line" onclick="copyCmd(this)">
+        <span>rails generate devise:install && rails generate devise User</span>
+        <span class="cmd-copy">copier</span>
+      </div>
+    </div>
+    <div class="cmd-block">
+      <div class="cmd-comment"># Générer les models</div>
+      <div class="cmd-line" onclick="copyCmd(this)">
+        <span>rails g model Appointment doctor:references patient:references scheduled_at:datetime status:integer notes:text</span>
+        <span class="cmd-copy">copier</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features par phase -->
+  <div class="section-label" style="margin-bottom:12px">// features à implémenter</div>
+  <div class="section-title" style="margin-bottom:8px">Construis feature par feature</div>
+  <p style="font-size:13px;color:var(--muted2);margin-bottom:40px">Chaque feature est liée aux topics du curriculum. Coche au fur et à mesure.</p>
+
+  <div class="features-section" id="features-container"></div>
+
+  <div class="page-footer">
+    <span style="font-size:11px;color:var(--muted)">Clique sur une feature pour la marquer comme faite</span>
+    <button class="reset-btn" onclick="resetFeatures()">↺ reset features</button>
+  </div>
+
+</div>
+</div>
+
+<script>
+/* ── DATA ── */
+const DATA = [
+  {cat:"Ruby",name:"Syntaxe de base",sub:"variables, conditions, boucles",level:"Fondamental",phase:1},
+  {cat:"Ruby",name:"Structures de données",sub:"array, hash",level:"Fondamental",phase:1},
+  {cat:"Ruby",name:"OOP",sub:"classes, modules, héritage",level:"Fondamental",phase:1},
+  {cat:"Ruby",name:"Enumerable",sub:"map, select, reduce",level:"Fondamental",phase:1},
+  {cat:"Ruby",name:"Gestion erreurs",sub:"begin/rescue",level:"Fondamental",phase:1},
+  {cat:"Ruby",name:"Blocks & Procs",sub:"closures et blocks",level:"Moyen",phase:1},
+  {cat:"Ruby",name:"Symbols & Frozen strings",sub:"performance Ruby",level:"Moyen",phase:2,isNew:true},
+  {cat:"Ruby",name:"Metaprogramming bases",sub:"method_missing, define_method",level:"Avancé",phase:4,isNew:true},
+
+  {cat:"Rails",name:"MVC",sub:"architecture globale",level:"Fondamental",phase:1},
+  {cat:"Rails",name:"Routing",sub:"routes REST",level:"Fondamental",phase:1},
+  {cat:"Rails",name:"Controllers",sub:"actions, params",level:"Fondamental",phase:1},
+  {cat:"Rails",name:"Views",sub:"ERB, partials",level:"Fondamental",phase:1},
+  {cat:"Rails",name:"Strong Params",sub:"sécuriser params",level:"Fondamental",phase:1},
+  {cat:"Rails",name:"Helpers",sub:"logique view",level:"Moyen",phase:2},
+  {cat:"Rails",name:"Callbacks",sub:"before_action etc",level:"Moyen",phase:2},
+  {cat:"Rails",name:"Flash messages",sub:"notice, alert",level:"Fondamental",phase:1,isNew:true},
+  {cat:"Rails",name:"Concerns",sub:"partager logique models/controllers",level:"Moyen",phase:2,isNew:true},
+
+  {cat:"ActiveRecord",name:"Associations",sub:"belongs_to, has_many",level:"Fondamental",phase:1},
+  {cat:"ActiveRecord",name:"Validations",sub:"présence, unicité",level:"Fondamental",phase:1},
+  {cat:"ActiveRecord",name:"Queries",sub:"where, joins",level:"Fondamental",phase:1},
+  {cat:"ActiveRecord",name:"Migrations",sub:"créer/modifier tables",level:"Fondamental",phase:1,isNew:true},
+  {cat:"ActiveRecord",name:"Scopes",sub:"requêtes réutilisables",level:"Moyen",phase:2},
+  {cat:"ActiveRecord",name:"Callbacks model",sub:"before_save, after_create",level:"Moyen",phase:2,isNew:true},
+  {cat:"ActiveRecord",name:"Transactions",sub:"atomicité",level:"Avancé",phase:3},
+  {cat:"ActiveRecord",name:"N+1",sub:"includes, eager loading",level:"Avancé",phase:3},
+  {cat:"ActiveRecord",name:"Polymorphic associations",sub:"as: :commentable",level:"Avancé",phase:4,isNew:true},
+  {cat:"ActiveRecord",name:"Counter cache",sub:"optimiser comptages",level:"Avancé",phase:4,isNew:true},
+
+  {cat:"Database",name:"SQL",sub:"SELECT, JOIN",level:"Fondamental",phase:1},
+  {cat:"Database",name:"Relations",sub:"foreign keys",level:"Fondamental",phase:1},
+  {cat:"Database",name:"Indexes",sub:"optimisation",level:"Avancé",phase:3},
+  {cat:"Database",name:"Constraints",sub:"NOT NULL, UNIQUE",level:"Avancé",phase:3},
+
+  {cat:"Frontend",name:"ERB",sub:"rendering",level:"Fondamental",phase:1},
+  {cat:"Frontend",name:"Forms",sub:"formulaires Rails",level:"Fondamental",phase:1},
+  {cat:"Frontend",name:"Tailwind",sub:"UI styling",level:"Fondamental",phase:2},
+  {cat:"Frontend",name:"Turbo",sub:"interactivité",level:"Moyen",phase:2},
+  {cat:"Frontend",name:"Stimulus",sub:"JS léger",level:"Moyen",phase:2},
+  {cat:"Frontend",name:"Importmap / Propshaft",sub:"assets pipeline",level:"Moyen",phase:2,isNew:true},
+
+  {cat:"Config & Env",name:"Variables d'env",sub:".env, credentials",level:"Fondamental",phase:2,isNew:true},
+  {cat:"Config & Env",name:"Rails credentials",sub:"secrets chiffrés",level:"Fondamental",phase:2,isNew:true},
+  {cat:"Config & Env",name:"config/environments",sub:"dev vs prod vs test",level:"Moyen",phase:2,isNew:true},
+  {cat:"Config & Env",name:"Initializers",sub:"config au démarrage",level:"Moyen",phase:2,isNew:true},
+
+  {cat:"Deployment",name:"Heroku / Render / Fly.io",sub:"déployer une app",level:"Fondamental",phase:3,isNew:true},
+  {cat:"Deployment",name:"Migrations en prod",sub:"db:migrate deploy",level:"Fondamental",phase:3,isNew:true},
+  {cat:"Deployment",name:"Variables d'env prod",sub:"config serveur",level:"Fondamental",phase:3,isNew:true},
+  {cat:"Deployment",name:"Logs prod",sub:"lire les logs",level:"Moyen",phase:3,isNew:true},
+
+  {cat:"API externe",name:"HTTParty / Faraday",sub:"consommer une API",level:"Fondamental",phase:3,isNew:true},
+  {cat:"API externe",name:"Webhooks",sub:"recevoir des callbacks",level:"Moyen",phase:3,isNew:true},
+  {cat:"API externe",name:"Gestion erreurs API",sub:"timeouts, retries",level:"Moyen",phase:3,isNew:true},
+  {cat:"API externe",name:"OAuth basique",sub:"login via Google/GitHub",level:"Moyen",phase:4,isNew:true},
+
+  {cat:"Auth",name:"Devise",sub:"authentification",level:"Fondamental",phase:2},
+  {cat:"Auth",name:"Roles",sub:"admin/user",level:"Fondamental",phase:2},
+  {cat:"Auth",name:"Policies (Pundit/ActionPolicy)",sub:"permissions utilisateur",level:"Fondamental",phase:2},
+  {cat:"Auth",name:"authorize!",sub:"contrôle accès controller",level:"Fondamental",phase:2},
+  {cat:"Auth",name:"Policy Scope",sub:"filtrage données",level:"Avancé",phase:3},
+
+  {cat:"Testing",name:"RSpec",sub:"tests unitaires",level:"Fondamental",phase:2},
+  {cat:"Testing",name:"FactoryBot",sub:"data test",level:"Fondamental",phase:2},
+  {cat:"Testing",name:"Request specs",sub:"tests API",level:"Moyen",phase:2},
+  {cat:"Testing",name:"Mocks & Stubs",sub:"allow, expect",level:"Moyen",phase:2,isNew:true},
+  {cat:"Testing",name:"System tests",sub:"tests UI",level:"Moyen",phase:3},
+  {cat:"Testing",name:"Policy testing",sub:"test permissions",level:"Avancé",phase:3},
+  {cat:"Testing",name:"Shared examples",sub:"DRY tests",level:"Avancé",phase:4,isNew:true},
+
+  {cat:"Git",name:"Basics",sub:"commit, push, pull",level:"Fondamental",phase:1},
+  {cat:"Git",name:"Branching",sub:"branches",level:"Fondamental",phase:1},
+  {cat:"Git",name:"Pull Requests",sub:"code review workflow",level:"Fondamental",phase:1,isNew:true},
+  {cat:"Git",name:"Debug git",sub:"logs, reset",level:"Moyen",phase:2},
+  {cat:"Git",name:"Rebase",sub:"historique propre",level:"Avancé",phase:3},
+
+  {cat:"Debugging",name:"Logs",sub:"logs Rails",level:"Fondamental",phase:1},
+  {cat:"Debugging",name:"Console",sub:"rails console",level:"Fondamental",phase:1},
+  {cat:"Debugging",name:"Byebug / Pry",sub:"breakpoints",level:"Fondamental",phase:1,isNew:true},
+  {cat:"Debugging",name:"Stack trace",sub:"erreurs",level:"Avancé",phase:2},
+
+  {cat:"Emails",name:"ActionMailer",sub:"envoyer emails",level:"Fondamental",phase:2},
+  {cat:"Emails",name:"Mail previews",sub:"tester mails",level:"Fondamental",phase:2},
+  {cat:"Emails",name:"Async emails",sub:"jobs emails",level:"Moyen",phase:3},
+
+  {cat:"Storage",name:"Active Storage",sub:"upload fichiers",level:"Fondamental",phase:2},
+  {cat:"Storage",name:"Attachments",sub:"fichiers liés models",level:"Fondamental",phase:2},
+  {cat:"Storage",name:"Validations fichiers",sub:"taille/type",level:"Moyen",phase:2},
+  {cat:"Storage",name:"Signed IDs",sub:"sécurité fichiers",level:"Avancé",phase:3},
+
+  {cat:"Jobs",name:"ActiveJob",sub:"jobs async",level:"Moyen",phase:3},
+  {cat:"Jobs",name:"Sidekiq",sub:"background jobs",level:"Avancé",phase:3},
+  {cat:"Jobs",name:"Retry jobs",sub:"gestion erreurs",level:"Avancé",phase:4},
+
+  {cat:"API",name:"JSON",sub:"réponses API",level:"Fondamental",phase:2},
+  {cat:"API",name:"REST",sub:"bonnes pratiques",level:"Fondamental",phase:2},
+  {cat:"API",name:"Serializers",sub:"blueprinter, jsonapi",level:"Moyen",phase:3,isNew:true},
+  {cat:"API",name:"Pagination",sub:"limiter data",level:"Moyen",phase:3},
+  {cat:"API",name:"Versioning API",sub:"/api/v1",level:"Moyen",phase:3,isNew:true},
+
+  {cat:"Realtime",name:"Turbo Streams",sub:"temps réel",level:"Moyen",phase:4},
+  {cat:"Realtime",name:"ActionCable",sub:"websocket",level:"Avancé",phase:4},
+
+  {cat:"Search & Pages",name:"Ransack",sub:"filtres",level:"Fondamental",phase:3},
+  {cat:"Search & Pages",name:"Kaminari",sub:"pagination",level:"Fondamental",phase:3},
+
+  {cat:"Files & Export",name:"CSV export",sub:"export data",level:"Moyen",phase:3},
+  {cat:"Files & Export",name:"PDF export",sub:"Prawn, WickedPDF",level:"Moyen",phase:3,isNew:true},
+
+  {cat:"Security",name:"CSRF",sub:"protection",level:"Fondamental",phase:2},
+  {cat:"Security",name:"Strong params",sub:"filtrage",level:"Fondamental",phase:1},
+  {cat:"Security",name:"CORS",sub:"config cross-origin",level:"Moyen",phase:3,isNew:true},
+  {cat:"Security",name:"XSS",sub:"protection",level:"Avancé",phase:3},
+  {cat:"Security",name:"Rate limiting",sub:"rack-attack",level:"Avancé",phase:3,isNew:true},
+  {cat:"Security",name:"File security",sub:"upload sécurisé",level:"Avancé",phase:3},
+
+  {cat:"Performance",name:"Bullet gem",sub:"détecter N+1",level:"Moyen",phase:3,isNew:true},
+  {cat:"Performance",name:"Queries optimisation",sub:"améliorer DB",level:"Avancé",phase:4},
+  {cat:"Performance",name:"Caching",sub:"Rails.cache",level:"Avancé",phase:4},
+
+  {cat:"Architecture",name:"Clean code",sub:"lisibilité",level:"Fondamental",phase:2},
+  {cat:"Architecture",name:"Service Objects",sub:"logique métier",level:"Avancé",phase:4},
+  {cat:"Architecture",name:"Refactoring",sub:"améliorer code",level:"Avancé",phase:4},
+  {cat:"Architecture",name:"Form Objects",sub:"multi-model forms",level:"Avancé",phase:4,isNew:true},
+  {cat:"Architecture",name:"Query Objects",sub:"isoler requêtes complexes",level:"Avancé",phase:4,isNew:true},
+
+  {cat:"Web",name:"HTTP",sub:"GET, POST",level:"Fondamental",phase:1},
+  {cat:"Web",name:"Status codes",sub:"200, 404",level:"Fondamental",phase:1},
+  {cat:"Web",name:"Sessions",sub:"cookies",level:"Moyen",phase:2},
+  {cat:"Web",name:"Headers HTTP",sub:"auth, content-type",level:"Moyen",phase:3,isNew:true},
+
+  {cat:"Advanced",name:"Data integrity",sub:"cohérence DB",level:"Avancé",phase:4},
+  {cat:"Advanced",name:"Monitoring",sub:"logs prod",level:"Moyen",phase:3},
+  {cat:"Advanced",name:"Concurrency",sub:"race conditions",level:"Avancé",phase:4},
+
+  {cat:"Soft Skills",name:"Communication",sub:"expliquer code",level:"Fondamental",phase:1},
+  {cat:"Soft Skills",name:"Lecture code",sub:"comprendre projet",level:"Fondamental",phase:1},
+  {cat:"Soft Skills",name:"Autonomie",sub:"résoudre seul",level:"Fondamental",phase:2},
+  {cat:"Soft Skills",name:"Documentation",sub:"README, inline docs",level:"Fondamental",phase:2,isNew:true},
+  {cat:"Soft Skills",name:"Compréhension métier",sub:"logique business",level:"Avancé",phase:4},
+];
+
+const PHASES = [
+  {
+    id:1, label:"01", name:"Fondations", cls:"p1",
+    tagline:"Les bases absolues pour construire ta première app Rails",
+    duration:"4 – 6 semaines", badge:"b-core", badgeLabel:"Core",
+    desc:"Tout ce dont tu as besoin pour comprendre Rails et écrire du Ruby fonctionnel.",
+    modules:[
+      {name:"Ruby", topics:["Syntaxe de base","Structures de données","OOP","Enumerable","Gestion erreurs","Blocks & Procs"]},
+      {name:"Rails MVC", topics:["MVC","Routing","Controllers","Views","Strong Params","Flash messages"]},
+      {name:"ActiveRecord", topics:["Associations","Validations","Queries","Migrations"]},
+      {name:"Database", topics:["SQL","Relations"]},
+      {name:"Frontend bases", topics:["ERB","Forms"]},
+      {name:"Git", topics:["Basics","Branching","Pull Requests"]},
+      {name:"Debugging", topics:["Logs","Console","Byebug / Pry"]},
+      {name:"Web", topics:["HTTP","Status codes"]},
+      {name:"Soft Skills", topics:["Communication","Lecture code"]},
+    ]
+  },
+  {
+    id:2, label:"02", name:"Construction", cls:"p2",
+    tagline:"Construire des apps complètes avec auth, tests et interface",
+    duration:"6 – 8 semaines", badge:"b-build", badgeLabel:"Build",
+    desc:"Les outils professionnels pour des apps robustes et sécurisées.",
+    modules:[
+      {name:"Auth", topics:["Devise","Roles","Policies (Pundit/ActionPolicy)","authorize!"]},
+      {name:"Rails avancé", topics:["Helpers","Callbacks","Concerns","Symbols & Frozen strings"]},
+      {name:"ActiveRecord+", topics:["Scopes","Callbacks model"]},
+      {name:"Frontend", topics:["Tailwind","Turbo","Stimulus","Importmap / Propshaft"]},
+      {name:"Config & Env", topics:["Variables d'env","Rails credentials","config/environments","Initializers"]},
+      {name:"Testing", topics:["RSpec","FactoryBot","Request specs","Mocks & Stubs"]},
+      {name:"Storage", topics:["Active Storage","Attachments","Validations fichiers"]},
+      {name:"Emails", topics:["ActionMailer","Mail previews"]},
+      {name:"API bases", topics:["JSON","REST"]},
+      {name:"Security bases", topics:["CSRF","Strong params"]},
+      {name:"Architecture", topics:["Clean code"]},
+      {name:"Debugging+", topics:["Stack trace"]},
+      {name:"Web+", topics:["Sessions"]},
+      {name:"Soft Skills", topics:["Autonomie","Documentation"]},
+    ]
+  },
+  {
+    id:3, label:"03", name:"Production", cls:"p3",
+    tagline:"Déployer, sécuriser et optimiser des apps en production",
+    duration:"4 – 6 semaines", badge:"b-prod", badgeLabel:"Prod",
+    desc:"Tout ce qu'il faut pour mettre une app en ligne et la maintenir.",
+    modules:[
+      {name:"Deployment", topics:["Heroku / Render / Fly.io","Migrations en prod","Variables d'env prod","Logs prod"]},
+      {name:"ActiveRecord avancé", topics:["Transactions","N+1","Auth: Policy Scope"]},
+      {name:"Database avancée", topics:["Indexes","Constraints"]},
+      {name:"Jobs", topics:["ActiveJob","Sidekiq"]},
+      {name:"API externe", topics:["HTTParty / Faraday","Webhooks","Gestion erreurs API"]},
+      {name:"API Rails", topics:["Serializers","Pagination","Versioning API"]},
+      {name:"Testing avancé", topics:["System tests","Policy testing"]},
+      {name:"Security", topics:["XSS","CORS","Rate limiting","File security"]},
+      {name:"Performance", topics:["Bullet gem"]},
+      {name:"Search & Pagination", topics:["Ransack","Kaminari"]},
+      {name:"Export", topics:["CSV export","PDF export"]},
+      {name:"Emails async", topics:["Async emails"]},
+      {name:"Storage+", topics:["Signed IDs"]},
+      {name:"Git avancé", topics:["Rebase"]},
+      {name:"Web", topics:["Headers HTTP"]},
+      {name:"Advanced", topics:["Monitoring"]},
+    ]
+  },
+  {
+    id:4, label:"04", name:"Excellence", cls:"p4",
+    tagline:"Patterns avancés, performance et maîtrise complète",
+    duration:"Continu", badge:"b-adv", badgeLabel:"Expert",
+    desc:"Pour viser le niveau senior : architecture propre, patterns avancés, temps réel.",
+    modules:[
+      {name:"Architecture", topics:["Service Objects","Refactoring","Form Objects","Query Objects"]},
+      {name:"ActiveRecord expert", topics:["Polymorphic associations","Counter cache"]},
+      {name:"Performance", topics:["Queries optimisation","Caching"]},
+      {name:"Realtime", topics:["Turbo Streams","ActionCable"]},
+      {name:"Jobs avancés", topics:["Retry jobs"]},
+      {name:"Ruby avancé", topics:["Metaprogramming bases"]},
+      {name:"API externe", topics:["OAuth basique"]},
+      {name:"Testing expert", topics:["Shared examples"]},
+      {name:"Advanced", topics:["Data integrity","Concurrency"]},
+      {name:"Soft Skills", topics:["Compréhension métier"]},
+    ]
+  }
+];
+
+const STORAGE_KEY = 'rdp-done-v2';
+const BDG = {Fondamental:'bf',Moyen:'bm',Avancé:'ba'};
+const BLBL = {Fondamental:'fond',Moyen:'moyen',Avancé:'avancé'};
+
+let done = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'));
+let activeFilter = 'Tous';
+
+function key(d){ return d.cat+'::'+d.name }
+function getCats(){ return [...new Set(DATA.map(d=>d.cat))] }
+
+function toggle(k){
+  done.has(k)?done.delete(k):done.add(k);
+  localStorage.setItem(STORAGE_KEY,JSON.stringify([...done]));
+  renderAll();
+}
+
+function resetProg(){
+  if(!confirm('Reset toute la progression ?')) return;
+  done.clear();localStorage.removeItem(STORAGE_KEY);
+  renderAll();
+}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const idx = ['overview','roadmap','curriculum','project'].indexOf(id);
+  if(idx>=0) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+}
+
+function setFilter(f){
+  activeFilter=f;
+  renderCurriculum();
+}
+
+/* ── STATS ── */
+function updateStats(){
+  const total = DATA.length;
+  const doneCount = [...done].filter(k=>DATA.some(d=>key(d)===k)).length;
+  const newCount = DATA.filter(d=>d.isNew).length;
+  const pct = total ? Math.round(doneCount/total*100) : 0;
+  const cats = getCats().length;
+
+  document.getElementById('ov-total').textContent = total;
+  document.getElementById('ov-new').textContent = newCount;
+  document.getElementById('ov-done').textContent = doneCount;
+  document.getElementById('ov-cats').textContent = cats;
+  document.getElementById('ov-pct').textContent = pct+'%';
+  document.getElementById('ov-bar').style.width = pct+'%';
+
+  document.getElementById('nav-done-text').textContent = doneCount+' complétés';
+  document.getElementById('nav-pct').textContent = pct+'%';
+
+  document.getElementById('footer-txt').textContent = doneCount+' / '+total+' topics complétés — '+pct+'%';
+}
+
+/* ── ROADMAP ── */
+function renderRoadmap(){
+  const c = document.getElementById('phases-container');
+  c.innerHTML = PHASES.map((ph,i)=>{
+    const phTopics = DATA.filter(d=>d.phase===ph.id);
+    const phDone = phTopics.filter(d=>done.has(key(d))).length;
+    const mods = ph.modules.map(m=>{
+      const chips = m.topics.map(t=>{
+        const d = DATA.find(x=>x.name===t);
+        const n = d && d.isNew;
+        return `<span class="topic-chip${n?' new':''}">${t}</span>`;
+      }).join('');
+      return `<div class="module-card">
+        <div class="module-card-top">
+          <div class="module-card-name">${m.name}</div>
+          <span class="module-badge ${ph.badge}">${ph.badgeLabel}</span>
+        </div>
+        <div class="module-topics">${chips}</div>
+      </div>`;
+    }).join('');
+
+    return `
+      <div class="phase ${ph.cls}" id="phase-${ph.id}">
+        <div class="phase-header" onclick="togglePhase(${ph.id})">
+          <span class="phase-num">${ph.label}</span>
+          <div class="phase-color"></div>
+          <div class="phase-info">
+            <div class="phase-name">${ph.name}</div>
+            <div class="phase-tagline">${ph.tagline}</div>
+          </div>
+          <div class="phase-meta">
+            <span style="font-size:11px;color:var(--muted2)">${phDone}/${phTopics.length} topics</span>
+            <span class="phase-dur">${ph.duration}</span>
+          </div>
+          <span class="phase-arrow">▾</span>
+        </div>
+        <div class="phase-body">
+          <div class="phase-modules">${mods}</div>
+        </div>
+      </div>
+      ${i<PHASES.length-1?'<div class="timeline-line"></div>':''}
+    `;
+  }).join('');
+}
+
+function togglePhase(id){
+  document.getElementById('phase-'+id).classList.toggle('open');
+}
+
+/* ── CURRICULUM ── */
+function renderFilters(){
+  const bar = document.getElementById('filterBar');
+  const filters = ['Tous','Nouveau',...getCats()];
+  bar.innerHTML = filters.map(f=>{
+    const isN = f==='Nouveau';
+    return `<button class="filter-btn${f===activeFilter?' active':''}${isN?' new-f':''}" onclick="setFilter('${f}')">${f}</button>`;
+  }).join('');
+}
+
+function topicHTML(d){
+  const k = key(d);
+  const isDone = done.has(k);
+  const esc = k.replace(/'/g,"\\'");
+  return `<div class="t-item${isDone?' done':''}${d.isNew?' isnew':''}" onclick="toggle('${esc}')">
+    <div class="chk"><span class="chk-tick">✓</span></div>
+    <div class="t-info">
+      <div class="t-name">${d.name}</div>
+      <div class="t-sub">${d.sub}</div>
+    </div>
+    <div class="t-badges">
+      ${d.isNew?'<span class="t-badge bn">new</span>':''}
+      <span class="t-badge ${BDG[d.level]}">${BLBL[d.level]}</span>
+    </div>
+  </div>`;
+}
+
+function renderCurriculum(){
+  renderFilters();
+  const content = document.getElementById('content');
+  let items = DATA;
+  if(activeFilter==='Nouveau') items = DATA.filter(d=>d.isNew);
+  else if(activeFilter!=='Tous') items = DATA.filter(d=>d.cat===activeFilter);
+
+  if(activeFilter==='Nouveau'){
+    content.innerHTML = `<div class="flat-grid">${items.map(topicHTML).join('')}</div>`;
+    return;
+  }
+
+  const cats = activeFilter==='Tous' ? getCats() : [activeFilter];
+  content.innerHTML = `<div class="cats-grid">${cats.map(cat=>{
+    const ci = items.filter(d=>d.cat===cat);
+    if(!ci.length) return '';
+    const doneCnt = ci.filter(d=>done.has(key(d))).length;
+    return `<div class="cat-block">
+      <div class="cat-head">
+        <span class="cat-name">${cat}</span>
+        <span class="cat-cnt">${doneCnt}/${ci.length}</span>
+      </div>
+      <div class="topic-list">${ci.map(topicHTML).join('')}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderAll(){
+  updateStats();
+  renderRoadmap();
+  renderCurriculum();
+  renderProject();
+}
+
+/* ── PROJECT ── */
+const FEAT_KEY = 'rdp-features-v1';
+let featDone = new Set(JSON.parse(localStorage.getItem(FEAT_KEY)||'[]'));
+
+const FEATURES = [
+  {
+    phase:2, phaseColor:'var(--phase2)', phaseName:'Phase 2 — Construction',
+    items:[
+      {
+        id:'f01', name:'Setup & authentification',
+        desc:'Installer Rails, Devise, configurer PostgreSQL. Créer le modèle User avec les rôles patient / doctor / admin via un enum. Ajouter before_action :authenticate_user! sur les controllers protégés.',
+        topics:[{t:'Devise',l:'fond'},{t:'Routing',l:'fond'},{t:'Roles',l:'fond'},{t:'Controllers',l:'fond'},{t:'Flash messages',l:'fond'}],
+        refs:[
+          {label:'Devise Getting Started',url:'https://github.com/heartcombo/devise#getting-started'},
+          {label:'Rails Enum',url:'https://api.rubyonrails.org/classes/ActiveRecord/Enum.html'},
+          {label:'Rails Routing Guide',url:'https://guides.rubyonrails.org/routing.html'},
+        ]
+      },
+      {
+        id:'f02', name:'CRUD Appointments',
+        desc:'Générer le model Appointment avec ses associations (belongs_to :doctor, belongs_to :patient). Créer le controller avec les 7 actions REST. Ajouter les validations : scheduled_at obligatoire, pas dans le passé, status par défaut à pending.',
+        topics:[{t:'Associations',l:'fond'},{t:'Validations',l:'fond'},{t:'Strong Params',l:'fond'},{t:'MVC',l:'fond'},{t:'Migrations',l:'fond'}],
+        refs:[
+          {label:'ActiveRecord Associations',url:'https://guides.rubyonrails.org/association_basics.html'},
+          {label:'ActiveRecord Validations',url:'https://guides.rubyonrails.org/active_record_validations.html'},
+          {label:'Rails Controllers Guide',url:'https://guides.rubyonrails.org/action_controller_overview.html'},
+        ]
+      },
+      {
+        id:'f03', name:'Autorisation avec Pundit',
+        desc:'Créer une AppointmentPolicy : un patient ne voit que ses RDV, un médecin ne voit que les siens, un admin voit tout. Utiliser authorize dans chaque action du controller et policy_scope dans index.',
+        topics:[{t:'Policies (Pundit/ActionPolicy)',l:'fond'},{t:'authorize!',l:'fond'},{t:'Policy Scope',l:'moy'},{t:'Callbacks',l:'moy'}],
+        refs:[
+          {label:'Pundit README',url:'https://github.com/varvet/pundit'},
+          {label:'ActionPolicy Docs',url:'https://actionpolicy.evilmartians.io/'},
+          {label:'Rails Security Guide',url:'https://guides.rubyonrails.org/security.html'},
+        ]
+      },
+      {
+        id:'f04', name:'Interface Tailwind + formulaires',
+        desc:'Créer les vues ERB avec Tailwind. Formulaire de RDV avec form_with, select de médecin, datetime_local. Liste des RDV avec statut coloré. Partials pour les cards de RDV réutilisables.',
+        topics:[{t:'Views',l:'fond'},{t:'Tailwind',l:'fond'},{t:'Forms',l:'fond'},{t:'Helpers',l:'moy'},{t:'ERB',l:'fond'}],
+        refs:[
+          {label:'Rails Form Helpers',url:'https://guides.rubyonrails.org/form_helpers.html'},
+          {label:'Tailwind CSS Docs',url:'https://tailwindcss.com/docs'},
+          {label:'ERB Guide',url:'https://guides.rubyonrails.org/layouts_and_rendering.html'},
+        ]
+      },
+      {
+        id:'f05', name:'Upload photo de profil médecin',
+        desc:'Utiliser Active Storage pour que chaque médecin puisse uploader une photo de profil. Ajouter une validation de type (image/jpeg, image/png) et de taille (max 5MB). Afficher dans la liste des médecins.',
+        topics:[{t:'Active Storage',l:'fond'},{t:'Attachments',l:'fond'},{t:'Validations fichiers',l:'moy'},{t:'File security',l:'adv'}],
+        refs:[
+          {label:'Active Storage Guide',url:'https://guides.rubyonrails.org/active_storage_overview.html'},
+          {label:'ActiveStorage Validations gem',url:'https://github.com/igorkasyanchuk/active_storage_validations'},
+        ]
+      },
+      {
+        id:'f06', name:'Tests RSpec de base',
+        desc:'Écrire des tests model pour les validations Appointment. FactoryBot factories pour User et Appointment. Request specs pour tester que les routes redirigent les non-authentifiés. Tests Pundit pour les policies.',
+        topics:[{t:'RSpec',l:'fond'},{t:'FactoryBot',l:'fond'},{t:'Request specs',l:'moy'},{t:'Policy testing',l:'adv'},{t:'Mocks & Stubs',l:'moy'}],
+        refs:[
+          {label:'RSpec Rails Docs',url:'https://rspec.info/documentation/'},
+          {label:'FactoryBot Getting Started',url:'https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md'},
+          {label:'Testing Rails Apps',url:'https://guides.rubyonrails.org/testing.html'},
+        ]
+      },
+    ]
+  },
+  {
+    phase:3, phaseColor:'var(--phase3)', phaseName:'Phase 3 — Production',
+    items:[
+      {
+        id:'f07', name:'Déploiement sur Render',
+        desc:'Configurer les variables d\'environnement (DATABASE_URL, SECRET_KEY_BASE, RAILS_MASTER_KEY). Créer le Procfile. Lancer rails db:migrate en production. Vérifier les logs pour débugger.',
+        topics:[{t:'Heroku / Render / Fly.io',l:'fond'},{t:'Variables d\'env',l:'fond'},{t:'Migrations en prod',l:'fond'},{t:'Logs prod',l:'moy'},{t:'Rails credentials',l:'fond'}],
+        refs:[
+          {label:'Render Rails Deploy Guide',url:'https://render.com/docs/deploy-rails'},
+          {label:'Rails Credentials Guide',url:'https://guides.rubyonrails.org/security.html#custom-credentials'},
+          {label:'12-factor App',url:'https://12factor.net/'},
+        ]
+      },
+      {
+        id:'f08', name:'Emails de confirmation (ActionMailer)',
+        desc:'Créer un AppointmentMailer avec deux méthodes : confirmation_email (quand un RDV est créé) et reminder_email (rappel 24h avant). Utiliser deliver_later pour envoyer en async via Sidekiq.',
+        topics:[{t:'ActionMailer',l:'fond'},{t:'Mail previews',l:'fond'},{t:'Async emails',l:'moy'},{t:'ActiveJob',l:'moy'}],
+        refs:[
+          {label:'Action Mailer Basics',url:'https://guides.rubyonrails.org/action_mailer_basics.html'},
+          {label:'Sidekiq Wiki',url:'https://github.com/sidekiq/sidekiq/wiki'},
+          {label:'ActiveJob Basics',url:'https://guides.rubyonrails.org/active_job_basics.html'},
+        ]
+      },
+      {
+        id:'f09', name:'Jobs Sidekiq — rappels automatiques',
+        desc:'Créer un ReminderJob qui envoie un email 24h avant chaque RDV. Planifier le job avec sidekiq-cron ou en le déclenchant à la création du RDV. Gérer les erreurs si le RDV est annulé entre-temps.',
+        topics:[{t:'Sidekiq',l:'adv'},{t:'Retry jobs',l:'adv'},{t:'Async emails',l:'moy'},{t:'Gestion erreurs',l:'fond'}],
+        refs:[
+          {label:'Sidekiq Best Practices',url:'https://github.com/sidekiq/sidekiq/wiki/Best-Practices'},
+          {label:'sidekiq-cron gem',url:'https://github.com/sidekiq-cron/sidekiq-cron'},
+          {label:'ActiveJob Retries',url:'https://guides.rubyonrails.org/active_job_basics.html#retrying-or-discarding-failed-jobs'},
+        ]
+      },
+      {
+        id:'f10', name:'Recherche et filtres (Ransack + Kaminari)',
+        desc:'Ajouter une barre de recherche sur la liste des RDV. Filtrer par médecin, statut, date. Paginer les résultats avec Kaminari (10 par page). Ajouter des index DB sur les colonnes filtrées pour les performances.',
+        topics:[{t:'Ransack',l:'fond'},{t:'Kaminari',l:'fond'},{t:'Scopes',l:'moy'},{t:'Indexes',l:'adv'},{t:'Queries',l:'fond'}],
+        refs:[
+          {label:'Ransack Docs',url:'https://github.com/activerecord-hackery/ransack'},
+          {label:'Kaminari Docs',url:'https://github.com/kaminari/kaminari'},
+          {label:'Rails DB Indexes Guide',url:'https://guides.rubyonrails.org/active_record_migrations.html#adding-a-column-index'},
+        ]
+      },
+      {
+        id:'f11', name:'Export CSV des rendez-vous',
+        desc:'Ajouter un bouton "Exporter CSV" sur le dashboard admin. Générer le fichier avec la lib CSV de Ruby. Inclure les colonnes : patient, médecin, date, statut. Protéger l\'endpoint avec Pundit (admin only).',
+        topics:[{t:'CSV export',l:'moy'},{t:'authorize!',l:'fond'},{t:'Callbacks',l:'moy'},{t:'Controllers',l:'fond'}],
+        refs:[
+          {label:'Ruby CSV Docs',url:'https://ruby-doc.org/stdlib/libdoc/csv/rdoc/CSV.html'},
+          {label:'Rails CSV Export Guide',url:'https://www.rubyguides.com/2018/12/ruby-csv/'},
+        ]
+      },
+      {
+        id:'f12', name:'API JSON pour les RDVs',
+        desc:'Créer un namespace /api/v1 avec un AppointmentsController dédié. Répondre en JSON avec respond_to. Utiliser des serializers pour formater la réponse. Ajouter l\'authentification token-based.',
+        topics:[{t:'JSON',l:'fond'},{t:'REST',l:'fond'},{t:'Serializers',l:'moy'},{t:'Versioning API',l:'moy'},{t:'CORS',l:'moy'}],
+        refs:[
+          {label:'Rails API Mode',url:'https://guides.rubyonrails.org/api_app.html'},
+          {label:'Blueprinter gem',url:'https://github.com/procore-oss/blueprinter'},
+          {label:'rack-cors gem',url:'https://github.com/cyu/rack-cors'},
+        ]
+      },
+      {
+        id:'f13', name:'Sécurité renforcée',
+        desc:'Configurer rack-attack pour limiter les tentatives de login (max 5/minute par IP). Vérifier la protection CSRF active sur tous les formulaires. S\'assurer que les fichiers uploadés ne sont accessibles qu\'aux utilisateurs autorisés via Signed IDs.',
+        topics:[{t:'Rate limiting',l:'adv'},{t:'CSRF',l:'fond'},{t:'Signed IDs',l:'adv'},{t:'XSS',l:'adv'}],
+        refs:[
+          {label:'rack-attack gem',url:'https://github.com/rack/rack-attack'},
+          {label:'Rails Security Guide',url:'https://guides.rubyonrails.org/security.html'},
+          {label:'Active Storage Security',url:'https://guides.rubyonrails.org/active_storage_overview.html#has-one-attached'},
+        ]
+      },
+    ]
+  },
+  {
+    phase:4, phaseColor:'var(--phase4)', phaseName:'Phase 4 — Excellence',
+    items:[
+      {
+        id:'f14', name:'Notifications temps réel (Turbo Streams)',
+        desc:'Quand un admin confirme un RDV, le patient voit le statut changer en temps réel sans recharger la page. Utiliser Turbo Streams avec broadcast_replace_to. Afficher un badge de notification dans la navbar.',
+        topics:[{t:'Turbo Streams',l:'moy'},{t:'ActionCable',l:'adv'},{t:'Turbo',l:'moy'}],
+        refs:[
+          {label:'Turbo Handbook',url:'https://turbo.hotwired.dev/handbook/introduction'},
+          {label:'Hotwire Docs',url:'https://hotwired.dev/'},
+          {label:'ActionCable Guide',url:'https://guides.rubyonrails.org/action_cable_overview.html'},
+        ]
+      },
+      {
+        id:'f15', name:'Service Object — logique de réservation',
+        desc:'Extraire la logique de création de RDV dans un AppointmentBookingService. Ce service vérifie la disponibilité du médecin, valide le créneau, crée le RDV et envoie l\'email en une seule transaction.',
+        topics:[{t:'Service Objects',l:'adv'},{t:'Transactions',l:'adv'},{t:'Clean code',l:'fond'},{t:'Refactoring',l:'adv'}],
+        refs:[
+          {label:'Service Objects in Rails',url:'https://www.toptal.com/ruby-on-rails/rails-service-objects-tutorial'},
+          {label:'ActiveRecord Transactions',url:'https://api.rubyonrails.org/classes/ActiveRecord/Transactions/ClassMethods.html'},
+        ]
+      },
+      {
+        id:'f16', name:'Dashboard admin avec caching',
+        desc:'Créer un dashboard admin avec des stats : nombre de RDV par médecin, taux de confirmation, RDV du jour. Utiliser Rails.cache.fetch pour mettre en cache les stats 5 minutes. Afficher avec des graphes simples.',
+        topics:[{t:'Caching',l:'adv'},{t:'Queries optimisation',l:'adv'},{t:'N+1',l:'adv'},{t:'Bullet gem',l:'moy'}],
+        refs:[
+          {label:'Rails Caching Guide',url:'https://guides.rubyonrails.org/caching_with_rails.html'},
+          {label:'Bullet gem',url:'https://github.com/flyerhzm/bullet'},
+          {label:'Rails Performance',url:'https://guides.rubyonrails.org/performance_testing.html'},
+        ]
+      },
+      {
+        id:'f17', name:'Refactoring & Query Objects',
+        desc:'Extraire les requêtes complexes dans des Query Objects dédiés (ex: UpcomingAppointmentsQuery, DoctorAvailabilityQuery). Ajouter des scopes sur Appointment. Nettoyer le code avec des concerns partagés.',
+        topics:[{t:'Query Objects',l:'adv'},{t:'Scopes',l:'moy'},{t:'Concerns',l:'moy'},{t:'Refactoring',l:'adv'},{t:'Clean code',l:'fond'}],
+        refs:[
+          {label:'Query Objects Pattern',url:'https://thoughtbot.com/blog/a-case-for-query-objects-in-rails'},
+          {label:'Rails Concerns',url:'https://api.rubyonrails.org/classes/ActiveSupport/Concern.html'},
+        ]
+      },
+    ]
+  }
+];
+
+function renderProject(){
+  const c = document.getElementById('features-container');
+  if(!c) return;
+  const total = FEATURES.flatMap(p=>p.items).length;
+  const fdone = FEATURES.flatMap(p=>p.items).filter(f=>featDone.has(f.id)).length;
+  const pct = total ? Math.round(fdone/total*100) : 0;
+  document.getElementById('proj-pct').textContent = pct+'%';
+  document.getElementById('proj-bar').style.width = pct+'%';
+  document.getElementById('proj-count').textContent = fdone+' / '+total+' features';
+
+  c.innerHTML = FEATURES.map((ph,i)=>{
+    const phDone = ph.items.filter(f=>featDone.has(f.id)).length;
+    const items = ph.items.map(f=>{
+      const isDone = featDone.has(f.id);
+      const chips = f.topics.map(t=>`<span class="feat-topic${t.l==='moy'?' t-moy':t.l==='adv'?' t-adv':''}">${t.t}</span>`).join('');
+      const refs = f.refs.map(r=>`<a class="ref-link" href="${r.url}" target="_blank" rel="noopener">${r.label}</a>`).join('');
+      return `<div class="feature-item${isDone?' done-f':''}" id="fi-${f.id}">
+        <div class="feat-top">
+          <div class="feat-chk" onclick="toggleFeat('${f.id}')"><span class="feat-chk-t">✓</span></div>
+          <div class="feat-info">
+            <div class="feat-name">${f.name}</div>
+            <div class="feat-desc">${f.desc}</div>
+          </div>
+        </div>
+        <div class="feat-meta">${chips}</div>
+        <div class="feat-refs">${refs}</div>
+      </div>`;
+    }).join('');
+    return `<div class="features-phase${i===0?' open':''}" id="fp-${ph.phase}">
+      <div class="features-phase-head" onclick="toggleFeatPhase(${ph.phase})">
+        <div class="fph-bar" style="height:36px;background:${ph.phaseColor}"></div>
+        <span class="fph-num">0${ph.phase}</span>
+        <span class="fph-name" style="color:${ph.phaseColor}">${ph.phaseName}</span>
+        <span class="fph-count">${phDone}/${ph.items.length} features</span>
+        <span class="fph-arrow">▾</span>
+      </div>
+      <div class="features-phase-body">
+        <div class="features-grid">${items}</div>
+      </div>
+    </div>`;
+  }).join('<div style="height:3px"></div>');
+}
+
+function toggleFeat(id){
+  featDone.has(id)?featDone.delete(id):featDone.add(id);
+  localStorage.setItem(FEAT_KEY,JSON.stringify([...featDone]));
+  renderProject();
+}
+
+function toggleFeatPhase(id){
+  document.getElementById('fp-'+id).classList.toggle('open');
+}
+
+function resetFeatures(){
+  if(!confirm('Reset toutes les features ?')) return;
+  featDone.clear();localStorage.removeItem(FEAT_KEY);
+  renderProject();
+}
+
+function copyCmd(el){
+  const txt = el.querySelector('span:first-child').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const lbl = el.querySelector('.cmd-copy');
+    lbl.textContent='copié ✓';lbl.style.color='var(--accent)';
+    setTimeout(()=>{lbl.textContent='copier';lbl.style.color='';},1800);
+  });
+}
+
+// Init
+renderAll();
+// Animate progress on load
+setTimeout(()=>{
+  const total = DATA.length;
+  const doneCount = [...done].filter(k=>DATA.some(d=>key(d)===k)).length;
+  document.getElementById('ov-bar').style.width = Math.round(doneCount/total*100)+'%';
+  document.getElementById('proj-bar').style.width =
+    Math.round(FEATURES.flatMap(p=>p.items).filter(f=>featDone.has(f.id)).length /
+    FEATURES.flatMap(p=>p.items).length * 100)+'%';
+},100);
+</script>
+</body>
+</html>

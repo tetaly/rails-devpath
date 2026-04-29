@@ -1,0 +1,26 @@
+/* ═══════════════════════════════════════════
+   Rails System Model — Centerpiece
+   ═══════════════════════════════════════════ */
+
+.rails-model-container {
+  position: fixed;
+  top: 50px;
+  right: -200px;
+  width: 1400px;
+  padding: 10px;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.rails-model-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .rails-model-container {
+    display: none;
+  }
+}

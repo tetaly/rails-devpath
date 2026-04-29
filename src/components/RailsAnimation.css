@@ -1,0 +1,38 @@
+.rails-animation-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--bg);
+  overflow: hidden;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rails-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+}
+
+.svg-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  fill: #fff;
+}
+
+.code-snippet {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  fill: var(--muted2);
+  letter-spacing: 0.05em;
+}
+
+.data-packet {
+  /* Ensure CSS offset path properties are respected */
+  offset-rotate: auto;
+}

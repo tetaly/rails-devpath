@@ -25,7 +25,8 @@ const TECH_STACK = [
 ];
 
 export default function Overview({ stats, t, lang }) {
-  const [loaderDone, setLoaderDone] = useState(false);
+  const alreadySeen = sessionStorage.getItem('loaderSeen') === 'true';
+  const [loaderDone, setLoaderDone] = useState(alreadySeen);
   const [activePhase, setActivePhase] = useState(4);
   const [hoveredPhase, setHoveredPhase] = useState(null);
   const heroRef = useRef(null);
@@ -35,11 +36,15 @@ export default function Overview({ stats, t, lang }) {
   const heroContentRef = useRef(null);
 
   const handleLoaderComplete = useCallback(() => {
+    sessionStorage.setItem('loaderSeen', 'true');
     setLoaderDone(true);
   }, []);
 
   useEffect(() => {
-    if (prefersReduced) setLoaderDone(true);
+    if (prefersReduced) {
+      sessionStorage.setItem('loaderSeen', 'true');
+      setLoaderDone(true);
+    }
   }, [prefersReduced]);
 
   // ── Hero entrance timeline ──

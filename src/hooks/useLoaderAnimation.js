@@ -34,8 +34,8 @@ export default function useLoaderAnimation(options = {}) {
       'Starting application server...',
       'System ready.',
     ],
-    typeSpeed = 30,
-    minDuration = 3200,
+    typeSpeed = 15,
+    minDuration = 1600,
     onComplete,
   } = options;
 
@@ -57,7 +57,7 @@ export default function useLoaderAnimation(options = {}) {
       
       timerRef.current = setTimeout(() => {
         setExitPhase(true);
-      }, remaining + 400);
+      }, remaining + 150);
       return;
     }
 
@@ -75,7 +75,7 @@ export default function useLoaderAnimation(options = {}) {
         setCharIndex(0);
         setMessageIndex((i) => i + 1);
         setNodeProgress((i) => Math.min(i + 1, messages.length));
-      }, 200);
+      }, 80);
     }
 
     return () => clearTimeout(timerRef.current);
@@ -88,7 +88,7 @@ export default function useLoaderAnimation(options = {}) {
     const exitTimer = setTimeout(() => {
       setIsLoading(false);
       onComplete?.();
-    }, 800); // Duration of exit animation
+    }, 400); // Duration of exit animation
 
     return () => clearTimeout(exitTimer);
   }, [exitPhase, onComplete]);

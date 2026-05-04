@@ -192,8 +192,8 @@ export default function SystemLoader({ onComplete }) {
       'Starting Puma server...',
       'System ready.',
     ],
-    typeSpeed: 25,
-    minDuration: 3000,
+    typeSpeed: 12,
+    minDuration: 1400,
     onComplete,
   });
 

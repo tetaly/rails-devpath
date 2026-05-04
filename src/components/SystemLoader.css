@@ -10,9 +10,9 @@
   align-items: center;
   justify-content: center;
   background: #050508;
-  transition: opacity 0.8s cubic-bezier(0.4, 0, 0, 1),
-              transform 0.8s cubic-bezier(0.4, 0, 0, 1),
-              filter 0.8s cubic-bezier(0.4, 0, 0, 1);
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0, 1),
+              transform 0.4s cubic-bezier(0.4, 0, 0, 1),
+              filter 0.4s cubic-bezier(0.4, 0, 0, 1);
 }
 
 .system-loader--exit {
@@ -37,7 +37,7 @@
   width: 280px;
   height: 280px;
   opacity: 1;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .loader-graph--exit {

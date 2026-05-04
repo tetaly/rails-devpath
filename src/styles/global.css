@@ -139,6 +139,45 @@ button {
   color: var(--blue);
 }
 
+/* ═══════════════════════════════════════════
+   Global Micro-Interactions — Rails Theme
+   ═══════════════════════════════════════════ */
+
+/* Button glitch/flicker on hover */
+button:not(.navTab):not(.languageSwitch button):hover {
+  animation: btnFlicker 0.12s ease-in-out;
+}
+
+@keyframes btnFlicker {
+  0% { opacity: 1; }
+  25% { opacity: 0.7; }
+  50% { opacity: 1; }
+  75% { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+
+/* Link underline animates like a loading bar */
+a:not(.navTab):not(.logo):not(.phaseCard):not(.accountButton) {
+  position: relative;
+  text-decoration: none;
+}
+
+a:not(.navTab):not(.logo):not(.phaseCard):not(.accountButton)::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--green);
+  transition: width 0.4s cubic-bezier(0.25, 1, 0.25, 1);
+  box-shadow: 0 0 4px rgba(184, 240, 80, 0.2);
+}
+
+a:not(.navTab):not(.logo):not(.phaseCard):not(.accountButton):hover::after {
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .wrap {
     width: min(100% - 40px, 1240px);
@@ -147,5 +186,22 @@ button {
   .statusRow {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   Reduced Motion
+   ═══════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
   }
 }

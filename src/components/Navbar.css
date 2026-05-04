@@ -21,6 +21,8 @@
   border: 0;
   background: none;
   cursor: pointer;
+  padding-right: 48px;
+  margin-left: -70px;
   font-family: 'Syne', sans-serif;
   font-size: 18px;
   font-weight: 800;
